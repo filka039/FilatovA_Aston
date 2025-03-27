@@ -1,4 +1,3 @@
-import java.util.Arrays;
 
 public class  Main{
 
@@ -16,9 +15,9 @@ public class  Main{
                 "Japan", 14000, false);
         productArray[2] = new Product("TOYOTA Corolla", "30.12.2020", "TOYOTA, TMC",
                 "Japan", 15000, true);
-        productArray[3] = new Product("BMW X5", "17.04.2015", "TBMW AG",
+        productArray[3] = new Product("BMW X5", "17.04.2015", "BMW AG",
                 "Germany", 12000, false);
-        productArray[4] = new Product("BMW M5", "10.01.2020", "TBMW AG",
+        productArray[4] = new Product("BMW M5", "10.01.2020", "BMW AG",
                 "Germany", 110000, false);
 
         for (var prod : productArray){
