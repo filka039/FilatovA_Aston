@@ -1,45 +1,51 @@
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MyArraySizeException, MyArrayDataException {
+        String[][] testArray = new String[4][3];
 
-        Cat barsik = new Cat("Барсик", 7);
-        Cat kot = new Cat("Кот", 10);
-        Cat murzik = new Cat("Мурзик", 9);
-        murzik.run(15);
-        murzik.swim(100);
+        try {
+            arraySizeValidator(testArray);
+        } catch (MyArraySizeException e){
+            System.out.println(e.getMessage());
+        }
 
-        Dog bobik = new Dog("Бобик");
-        bobik.run(10);
-        bobik.swim(7);
+        String[][] array = {{"1", "4", "3", "4"},
+                            {"-1", "7", "0", "0"},
+                            {"4", "4", "999", "123"},
+                            {"12", "3", "0", "-8"}};
+        int sum = 0;
 
-        Cat.countCats();
-        Dog.countDogs();
-        Animal.countAnimals();
-
-        CatBowl catBowl = new CatBowl();
-        catBowl.addFood(7);
-        catBowl.addFood(2);
-        System.out.println(catBowl.getFoodValue());
-
-        catBowl.catsEat();
-        System.out.println(catBowl.getFoodValue());
-
-        catBowl.addFood(17);
-
-        catBowl.catsEat();
-        System.out.println(catBowl.getFoodValue());
-
-        System.out.printf("\n---------------------\n");
-
-        Circle circle1 = new Circle(3, "red", "black");
-        circle1.result();
-
-        Rectangle rectangle1 = new Rectangle(12.4,6,"Green", "Pink");
-        rectangle1.result();
-
-        Triangle triangle1 = new Triangle(2,4,3, "Blue", "Grey");
-        triangle1.result();
+        try {
+            for (int i = 0; i < array.length; i++){
+                for (int j = 0; j < array[i].length; j++){
+                    char[] chars = array[i][j].toCharArray();
+                    for (int a = 0; a < chars.length; a++){
+                        if (!Character.isDigit(chars[a]) && chars[a] != '-'){
+                            throw new MyArrayDataException("В массиве в ячейке[" + i +"][" + j + "] содержится не" +
+                                    " целочисленное число.");
+                        }
+                    }
+                    sum = sum + Integer.parseInt(array[i][j]);
+                }
+            }
+            System.out.println(sum);
+        } catch (MyArrayDataException e){
+            System.out.println(e.getMessage());
+        }
 
 
+        try{
+            int[] ints = new int[3];
+            ints[3] = 4;
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Мы вышли за границы массива");
+        }
+    }
+
+
+    public static void arraySizeValidator(String[][] array) throws MyArraySizeException {
+        if (array.length != 4 || array[0].length != 4){
+            throw new MyArraySizeException("Внесен массив неверного размера, необходимо внести массив размерном 4х4");
+        }
     }
 
 }
