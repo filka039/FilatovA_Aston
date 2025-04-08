@@ -1,141 +1,81 @@
-import java.util.Arrays;
-
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class Main {
-    public static void main(String[] args) {
-        printThreeWords();
-        checkSumSign();
-        printColor();
-        compareNumbers();
-        System.out.println(sumBetweenTenAndTwenty(6, 4));
-        positiveOrNegative(-1);
-        System.out.println(negativeNumber(0));
-        printString("String",5);
-        System.out.println(leapYear(2024));
-        swapZerosAndOnes(new int[]{1, 0, 1, 0, 1, 1, 1});
-        fillArray(100);
-        method12(new int[]{1,5,3,2,11,4,5,2,4,8,9,1});
-        fillArrayDiagonals(5);
-        System.out.println(Arrays.toString(fillArray(5, 3)));
+    public static void main(String[] args){
+
+        HashSet<Student> students = new HashSet<>();
+        students.add(new Student("Дмитрий", "Первая", 1, 3, 4,
+                5, 3, 3));
+        students.add(new Student("Андрей", "Вторая", 2, 2, 4,
+                3, 4, 5));
+        students.add(new Student("Алексей", "Первая", 3, 4, 2,
+                1, 4, 5));
+        students.add(new Student("Павел", "Первая", 2, 3, 4,
+                5, 3, 3));
+        students.add(new Student("Олег", "Вторая", 1, 2, 2,
+                2, 2, 2));
+
+        printStudentsInfo(students);
+        expulsion(students);
+        printStudentsInfo(students);
+        toNextCourse(students);
+        printStudents(students, 2);
+        System.out.println("___________\n");
+
+        //задание 2:
+        TelephoneDirectory telephoneDirectory = new TelephoneDirectory();
+        telephoneDirectory.add(884922, "Пушкин");
+        telephoneDirectory.add(125332, "Есенин");
+        telephoneDirectory.add(545668, "Толстой");
+        telephoneDirectory.add(154856, "Гоголь");
+        telephoneDirectory.add(221457, "Онегин");
+        telephoneDirectory.add(362985, "Пушкин");
+
+        telephoneDirectory.printAllDirectory();
+        telephoneDirectory.get("Пушкин");
 
     }
 
-    public static void printThreeWords() {
-        System.out.print("Orange\n" + "Banana\n" + "Apple\n");
-    }
-
-    public static void checkSumSign(){
-        int a, b;
-        a = 12;
-        b = -18;
-        if ((a+b) >= 0) {
-            System.out.println("Сумма положительная");
-        } else {
-            System.out.println("Сумма отрицательная");
+    public static void printStudentsInfo(HashSet<Student> students) {
+        for (var stud : students) {
+            System.out.println("Имя: " + stud.getName() + ", группа: " + stud.getGroup() + ", курс: " + stud.getCourse()
+                    + ", математика: " + stud.getMathGrade() + ", химия: " + stud.getChemistryGrade() + ", английский: "
+                    + stud.getEnglishGrade() + ", физика: " + stud.getPhysicsGrade() + ", биология: " +
+                    stud.getBiologyGrade() + ". Средняя оценка: " + ((stud.getMathGrade() + stud.getChemistryGrade() +
+                    stud.getEnglishGrade() + stud.getPhysicsGrade() + stud.getBiologyGrade()) / 5));
         }
+        System.out.println("");
     }
 
-    public static void printColor(){
-        int value = 76;
-        if (value <= 0){
-            System.out.println("Красный");
-        } else if (value > 0 && value <= 100) {
-            System.out.println("Желтый");
-        } else {
-            System.out.println("Зеленый");
-        }
-    }
-
-    public static void compareNumbers(){
-        int a, b;
-        a = 99;
-        b = 16;
-        if (a >= b){
-            System.out.println("a >= b");
-        } else {
-            System.out.println("a < b");
-        }
-    }
-
-    public static boolean sumBetweenTenAndTwenty(int a, int b){
-        return ((a+b) >= 10 && (a+b) <= 20);
-    }
-
-    public static void positiveOrNegative(int a){
-        if (a >= 0){
-            System.out.println("Число:" + a + " положительное");
-        } else {
-            System.out.println("Число:" + a + " отрицательное");
-        }
-    }
-
-    public static boolean negativeNumber(int a){
-        return a < 0;
-    }
-
-    public static void printString(String str, int stringsValue){
-        for (int i = 0; i < stringsValue; i++){
-            System.out.println(str);
-        }
-    }
-
-    public static boolean leapYear(int year){
-        if (year%400 == 0){
-            return true;
-        } else if (year%100 == 0) {
-            return false;
-        } else return year % 4 == 0;
-    }
-
-    public static void swapZerosAndOnes(int[] arr){
-        for (int i = 0; i < arr.length; i++){
-            switch (arr[i]) {
-                case 0:
-                    arr[i] = 1;
-                    break;
-                case 1:
-                    arr[i] = 0;
-                    break;
-            }
-        }
-        System.out.println(Arrays.toString(arr));
-    }
-
-    public static void fillArray(int n){
-        int [] arr = new int[n];
-        int a = 1;
-        for (int i = 1; i <101; i++){
-            arr[i-1] = a;
-            a++;
-        }
-        System.out.println(Arrays.toString(arr));
-    }
-
-    public static void method12(int[] arr){
-        for (int i = 0; i < arr.length; i++){
-            if (arr[i] < 6){
-                arr[i] = arr[i]*2;
-            }
-        }
-        System.out.println(Arrays.toString(arr));
-    }
-
-    public static void fillArrayDiagonals(int n){
-        int [][] arr = new int [n][n];
-        for (int i = 0; i < arr.length; i++){
-            for (int j = 0; j < arr[i].length; j++){
-                if (i == j || (arr[i].length -1 - j) == i){
-                    arr[i][j] = 1;
-                } if (j == arr[i].length -1)
-                    System.out.println(Arrays.toString(arr[i]));
+    public static void expulsion(HashSet<Student> students){
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()){
+            Student forExplulsion = iterator.next();
+            if(forExplulsion.getAverage() < 3){
+                iterator.remove();
             }
         }
     }
 
-    public static int[] fillArray(int len, int initialValue){
-        int [] arr = new int[len];
-        Arrays.fill(arr,initialValue);
-        return arr;
+    public static void toNextCourse(HashSet<Student> students){
+        for (var stud : students){
+            if (stud.getAverage() >= 3){
+                stud.setCourse(stud.getCourse() + 1);
+            }
+        }
     }
+
+    public static void printStudents(HashSet<Student> students, int course){
+        System.out.println("Студенты, обучающиеся на " + course + " курсе:");
+        for (var stud : students){
+            if (stud.getCourse() == course){
+                System.out.println(stud.getName());
+            }
+        }
+
+    }
+
+
 
 }
