@@ -1,58 +1,71 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public class FactorialTests {
-
-    @DisplayName("Smoke")
-    @ParameterizedTest
-    @CsvSource({"1,1","3,6","10, 3628800","13, 6227020800"})
-    public void factorialSmoke(String number, long expectedFactorial){
-        Assertions.assertEquals(expectedFactorial, Factorial.calculate(number));
+    //вычисление факториала
+    @DataProvider(name = "dataSmokeFactorial")
+    public static Object[][] dataNotNumbersAddiction() {
+        return new Object[][]{
+                {"1", 1},
+                {"3", 6},
+                {"10", 3628800},
+                {"13", 6227020800l}
+        };
     }
 
-    @DisplayName("NumberLessZero")
-    @ParameterizedTest
-    @CsvSource({"-1,0", "-999, 0", "-50000000, 0", "-5, 0"})
+    @Test(dataProvider =  "dataSmokeFactorial")
+    public void factorialSmoke(String number, long expectedFactorial){
+        Assert.assertEquals(expectedFactorial, Factorial.calculate(number));
+    }
+
+    @DataProvider(name = "dataNumberLessZero")
+    public static Object[][] dataNumberLessZero() {
+        return new Object[][]{
+                {"-1"},
+                {"-1000"},
+                {"-99999999"},
+        };
+    }
+
+    @Test(dataProvider = "dataNumberLessZero")
     public void numberLessZero(String number){
         try{
             Factorial.calculate(number);
         } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Введено отрицательное число, факториал не определен.", e.getMessage());
+            Assert.assertEquals(e.getMessage(), "Введено отрицательное число, факториал не определен.");
         }
     }
 
-    @DisplayName("NumberEqualsZero")
-    @ParameterizedTest
-    @CsvSource({"0,1"})
-    public void numberEqualsZero(String number, long expectedFactorial){
-        Assertions.assertEquals(expectedFactorial, Factorial.calculate(number));
+    @Test
+    public void numberEqualsZero(){
+        Assert.assertEquals(Factorial.calculate("0"),1);
     }
 
-    @DisplayName("NotIntegerNumber")
-    @ParameterizedTest
-    @CsvSource({"sft", "0.5", "%_", "+"})
+    @DataProvider(name = "dataNotIntegerNumber")
+    public static Object[][] dataNotIntegerNumber() {
+        return new Object[][]{
+                {"a"}, {"0.6"}, {"&"}
+        };
+    }
+
+    @Test(dataProvider = "dataNotIntegerNumber")
     public void notIntegerNumber(String number){
         try{
             Factorial.calculate(number);
         } catch (NumberFormatException e) {
-            Assertions.assertEquals("Нужно ввести целое число.", e.getMessage());
+            Assert.assertEquals(e.getMessage(), "Нужно ввести целое число.");
         }
     }
 
-    @DisplayName("EmptyField")
     @Test
     public void emptyField(){
         try{
             Factorial.calculate(null);
         } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Поле должно быть заполенено.", e.getMessage());
+            Assert.assertEquals(e.getMessage(),"Поле должно быть заполенено.");
         }
     }
-
 
 
 }

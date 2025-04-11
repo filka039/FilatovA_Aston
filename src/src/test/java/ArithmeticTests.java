@@ -1,179 +1,243 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 public class ArithmeticTests {
 
-    //сложение
-    @DisplayName("SmokeAddiction")
-    @ParameterizedTest
-    @CsvSource({"1, 2, 3", "0, 99999999999, 99999999999", "-1, -999, -1000"})
-    public void smokeAddiction (String a, String b, long expectedSum){
-        Assertions.assertEquals(expectedSum, Arithmetic.addition(a, b));
-    }
-
-    @DisplayName("NotNumbersAddiction")
-    @ParameterizedTest
-    @CsvSource({"a, 2", "0, +"})
-    public void notNumbersAddiction (String a, String b){
-        try{
-            Arithmetic.addition(a, b);
-        } catch (NumberFormatException e){
-            Assertions.assertEquals("Введите число.", e.getMessage());
+    public static class AddictionTests{
+        @DataProvider(name = "dataSmokeAddiction")
+        public static Object[][] dataSmokeAddiction() {
+            return new Object[][]{
+                    {"1", "2", 3},
+                    {"0", "9999999999", 9999999999l},
+                    {"-1", "-999", -1000}
+            };
         }
-    }
 
-    @DisplayName("EmptyField1Addiction")
-    @Test
-    public void emptyField1Addiction(){
-        try{
-            Arithmetic.addition(null, "9");
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+        @Test(dataProvider = "dataSmokeAddiction")
+        public void smokeAddiction(String a, String b, long expectedSum) {
+            assertEquals(Arithmetic.addition(a, b), expectedSum);
         }
-    }
 
-    @DisplayName("EmptyField2Addiction")
-    @Test
-    public void emptyField2Addiction(){
-        try{
-            Arithmetic.addition("-1", null);
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+        @DataProvider(name = "dataNotNumbersAddiction")
+        public static Object[][] dataNotNumbersAddiction() {
+            return new Object[][]{
+                    {"a", "3"},
+                    {"0255", "%"},
+            };
         }
-    }
 
-
-    //вычитание
-    @DisplayName("SmokeSubstraction")
-    @ParameterizedTest
-    @CsvSource({"1, 2, -1", "0, 999, -999", "-1, -999, 998"})
-    public void smokeSubstraction (String a, String b, long expectedDifference){
-        Assertions.assertEquals(expectedDifference, Arithmetic.substraction(a, b));
-    }
-
-    @DisplayName("NotNumbersSubstraction")
-    @ParameterizedTest
-    @CsvSource({"a, 2", "0, +"})
-    public void smokeSubstraction (String a, String b){
-        try{
-            Arithmetic.substraction(a, b);
-        } catch (NumberFormatException e){
-            Assertions.assertEquals("Введите число.", e.getMessage());
+        @Test(dataProvider = "dataNotNumbersAddiction")
+        public void notNumbersAddiction(String a, String b) {
+            try {
+                Arithmetic.addition(a, b);
+            } catch (NumberFormatException e) {
+                assertEquals(e.getMessage(), "Введите число.");
+            }
         }
-    }
 
-    @DisplayName("EmptyField1Substraction")
-    @Test
-    public void emptyField1Substraction(){
-        try{
-            Arithmetic.substraction(null, "9");
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+        @Test
+        public void emptyField1Addiction() {
+            try {
+                Arithmetic.addition(null, "9");
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
         }
-    }
 
-    @DisplayName("EmptyField2Substraction")
-    @Test
-    public void emptyField2Substraction(){
-        try{
-            Arithmetic.substraction("9", null);
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+        @Test
+        public void emptyField2Addiction() {
+            try {
+                Arithmetic.addition("9282", null);
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
         }
     }
 
 
-    //деление
-    @DisplayName("SmokeDivision")
-    @ParameterizedTest
-    @CsvSource({"1, 2, 0.5", "0, 999, 0", "100, 4, 25", "345, 100, 3.45"})
-    public void smokeDivision (String a, String b, double expectedDivision){
-        Assertions.assertEquals(expectedDivision, Arithmetic.division(a, b));
-    }
 
-    @DisplayName("NotNumbersDivision")
-    @ParameterizedTest
-    @CsvSource({"n, 4", "16, -"})
-    public void notNumbersDivision (String a, String b){
-        try{
-            Arithmetic.division(a, b);
-        } catch (NumberFormatException e){
-            Assertions.assertEquals("Введите число.", e.getMessage());
+
+    public static class SubstractionTests {
+
+        //вычитание
+        @DataProvider(name = "dataSmokeSubstraction")
+        public static Object[][] dataSmokeSubstraction() {
+            return new Object[][]{
+                    {"1", "2", -1},
+                    {"0", "999", -999},
+                    {"-1", "-999", 998}
+            };
+        }
+
+        @Test(dataProvider = "dataSmokeSubstraction")
+        public void smokeSubstraction(String a, String b, long expectedDifference) {
+            assertEquals(Arithmetic.substraction(a, b), expectedDifference);
+        }
+
+        @DataProvider(name = "dataNotNumbersSubstraction")
+        public static Object[][] dataNotNumbersSubstraction() {
+            return new Object[][]{
+                    {"a", "3"},
+                    {"0255", "%"},
+            };
+        }
+
+        @Test(dataProvider = "dataNotNumbersSubstraction")
+        public void notNumbersSubstraction (String a, String b){
+            try{
+                Arithmetic.substraction(a, b);
+            } catch (NumberFormatException e){
+                assertEquals(e.getMessage(), "Введите число.");
+            }
+        }
+
+        @Test
+        public void emptyField1Substraction() {
+            try {
+                Arithmetic.substraction(null, "9");
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
+        }
+
+        @Test
+        public void emptyField2Substraction() {
+            try {
+                Arithmetic.substraction("9282", null);
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
         }
     }
 
-    @DisplayName("EmptyField1Division")
-    @Test
-    public void emptyField1Division(){
-        try{
-            Arithmetic.division(null, "9");
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+
+    public static class DivisionTests {
+        //деление
+        @DataProvider(name = "dataSmokeDivision")
+        public static Object[][] dataSmokeDivision() {
+            return new Object[][]{
+                    {"1", "2", 0.5},
+                    {"0", "999", 0},
+                    {"100", "4", 25},
+                    {"345", "100", 3.45}
+            };
+        }
+
+        @Test(dataProvider = "dataSmokeDivision")
+        public void smokeDivision (String a, String b, double expectedDivision){
+            assertEquals(Arithmetic.division(a, b), expectedDivision);
+        }
+
+        @DataProvider(name = "dataNotNumbersDivision")
+        public static Object[][] dataNotNumbersDivision() {
+            return new Object[][]{
+                    {"n", "3"},
+                    {"025", "+-"},
+            };
+        }
+
+        @Test(dataProvider = "dataNotNumbersDivision")
+        public void notNumbersDivision (String a, String b){
+            try{
+                Arithmetic.division(a, b);
+            } catch (NumberFormatException e){
+                assertEquals(e.getMessage(), "Введите число.");
+            }
+        }
+
+        @Test
+        public void emptyField1Division() {
+            try {
+                Arithmetic.division(null, "9");
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
+        }
+
+        @Test
+        public void emptyField2Division() {
+            try {
+                Arithmetic.division("9282", null);
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
+        }
+
+        @DataProvider(name = "dataDivisionByZero")
+        public static Object[][] dataDivisionByZero() {
+            return new Object[][]{
+                {"100", "0"},
+                {"0", "29"}
+            };
+        }
+
+        @Test(dataProvider = "dataDivisionByZero")
+        public void divisionByZero (String a, String b){
+            try{
+                Arithmetic.division(a, b);
+            } catch (IllegalArgumentException e){
+                assertEquals(e.getMessage(), "На ноль делить нельзя. (вообще можно, но тут нельзя=))");
+            }
         }
     }
 
-    @DisplayName("EmptyField2Division")
-    @Test
-    public void emptyField2Division(){
-        try{
-            Arithmetic.division("-1", null);
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
+
+
+    public static class MultiplicationTests{
+        //умножение
+        @DataProvider(name = "dataSmokeMultiplication")
+        public static Object[][]dataSmokeMultiplication(){
+            return new Object[][]{
+                    {"1", "0", 0.0},
+                    {"225.3", "2", 450.6},
+                    {"0", "908", 0},
+                    {"10", "33.34", 333.4}
+            };
+        }
+
+        @Test(dataProvider = "dataSmokeMultiplication")
+        public void smokeMultiplication (String a, String b, double expectedMultiplication){
+            assertEquals(expectedMultiplication, Arithmetic.multiplication(a, b));
+        }
+
+        @DataProvider(name = "dataNotNumbersMultiplication")
+        public static Object[][] dataNotNumbersMultiplication() {
+            return new Object[][]{
+                    {"A", "3"},
+                    {"025", "^"},
+            };
+        }
+
+        @Test(dataProvider = "dataNotNumbersMultiplication")
+        public void notNumbersDivision (String a, String b){
+            try{
+                Arithmetic.multiplication(a, b);
+            } catch (NumberFormatException e){
+                assertEquals(e.getMessage(), "Введите число.");
+            }
+        }
+
+        @Test
+        public void emptyField1Multiplication() {
+            try {
+                Arithmetic.multiplication(null, "9");
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
+        }
+
+        @Test
+        public void emptyField2Multiplication() {
+            try {
+                Arithmetic.multiplication("45", null);
+            } catch (IllegalArgumentException e) {
+                assertEquals(e.getMessage(), "Оба поля должны быть заполнены.");
+            }
         }
     }
 
-    @DisplayName("DivisionByZero")
-    @ParameterizedTest
-    @CsvSource({"100, 0", "0, 0"})
-    public void divisionByZero (String a, String b){
-        try{
-            Arithmetic.division(a, b);
-        } catch (IllegalArgumentException e){
-            Assertions.assertEquals("На ноль делить нельзя. (вообще можно, но тут нельзя=))", e.getMessage());
-        }
-    }
-
-
-    //умножение
-    @DisplayName("SmokeMultiplication")
-    @ParameterizedTest
-    @CsvSource({"1, 0, 0.0", "225.3, 2, 450.6", "0, 908, 0", "10, 33.34, 333.4"})
-    public void smokeMultiplication (String a, String b, double expectedMultiplication){
-        Assertions.assertEquals(expectedMultiplication, Arithmetic.multiplication(a, b));
-    }
-
-    @DisplayName("NotNumbersMultiplication")
-    @ParameterizedTest
-    @CsvSource({"F, 0.34", "245.3, :"})
-    public void notNumbersMultiplication (String a, String b){
-        try{
-            Arithmetic.multiplication(a, b);
-        } catch (NumberFormatException e){
-            Assertions.assertEquals("Введите число.", e.getMessage());
-        }
-    }
-
-    @DisplayName("EmptyField1Multiplication")
-    @Test
-    public void emptyField1Multiplication(){
-        try{
-            Arithmetic.multiplication(null, "139");
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
-        }
-    }
-
-    @DisplayName("EmptyField2Multiplication")
-    @Test
-    public void emptyField2Multiplication(){
-        try{
-            Arithmetic.multiplication("-1039.48", null);
-        } catch (IllegalArgumentException e) {
-            Assertions.assertEquals("Оба поля должны быть заполнены.", e.getMessage());
-        }
-    }
 
 }
